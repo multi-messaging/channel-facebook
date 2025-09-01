@@ -1,4 +1,10 @@
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpStatus,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import { environment } from 'src/config';
 @Injectable()
 export class WebhookService {
@@ -12,7 +18,10 @@ export class WebhookService {
       return challenge;
     } else {
       this.logger.error('❌ Token de verificación inválido');
-      throw new UnauthorizedException('Token de verificación inválido');
+      throw new RpcException({
+        message: 'Token de verificación inválido',
+        status: HttpStatus.BAD_REQUEST,
+      });
     }
   }
 
